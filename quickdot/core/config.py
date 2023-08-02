@@ -70,8 +70,6 @@ class Config:
             print("No config file found.")
         except json.JSONDecodeError or KeyError:
             print("Invalid config file.")
-        except Exception as e:
-            print(e)
     
     def _handle_args(self, args):
         """Handles the command line arguments."""
@@ -100,9 +98,6 @@ class Config:
         except ValueError as e:
             self.build_number = 0
             self.prev_version = self.version
-        except Exception as e:
-            print(e)
-            exit(1)
         finally:
             if self.version != self.prev_version:
                 self.build_number = 0
