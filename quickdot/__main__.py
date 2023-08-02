@@ -1,8 +1,8 @@
 import argparse
 
-from core.config import Config
-from core.generate import Generator
-from core.trans import TranslationManager
+from quickdot.core.config import Config
+from quickdot.core.generate import Generator
+from quickdot.core.trans import TranslationManager
 
 def parse_args():
     """Parses the command line arguments."""
