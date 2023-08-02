@@ -75,9 +75,17 @@ class Generator:
         
         def get_element_filter(name):
             return self.site_map.elements[name]
+        
+        def get_element_lang_url(data):
+            return self.site_map.elements[data['element'].name].get_url(data['lang'])
+        
+        def get_element_name(element):
+            return self.trans.get_text(element.name, self.context['_LANG'])
 
         jinja_env.filters['get_url'] = get_url_filter
         jinja_env.filters['get_element'] = get_element_filter
+        jinja_env.filters['get_element_name'] = get_element_name
+        jinja_env.filters['get_element_lang_url'] = get_element_lang_url
 
         return jinja_env
 
@@ -166,6 +174,7 @@ class Generator:
 
         site_map_element = self.site_map.elements[element]
         site_map_element.toggle_active()
+        context['_ELEMENT'] = site_map_element
         template = self.jinja_env.from_string(element_content, context)
         rendered = template.render(context)
         site_map_element.toggle_active()
