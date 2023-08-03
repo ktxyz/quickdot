@@ -2,6 +2,8 @@ import os
 import json
 from pathlib import Path
 
+import pytz
+
 
 class Config:
     # The root path of the project
@@ -29,6 +31,11 @@ class Config:
                 self.use_threads = config_data["use_threads"]
                 self.thread_count = config_data["thread_count"]
 
+                self.ignored_paths = [self.ROOT_PATH / p for p in config_data["ignored_paths"]]
+                self.ignored_files = config_data['ignored_files']
+
+                self.timezone = pytz.timezone(config_data["timezone"])
+
                 self.gather_texts = False
 
                 self.live_server_port = config_data["live_server_port"]
@@ -36,8 +43,6 @@ class Config:
             print("No config file found.")
         except json.JSONDecodeError or KeyError:
             print("Invalid config file.")
-        except Exception as e:
-            print(e)
     
     def _load_site_config(self):
         """Loads the site config file."""

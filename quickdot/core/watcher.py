@@ -23,16 +23,16 @@ def create_custom_handle(config):
 class QuickdotHandler(PatternMatchingEventHandler):
     def __init__(self, config, generator):
         # Normalize paths and ignore everything that is in the .git directory or in the output directory
-        ignore_patterns = [os.path.normpath(str(config.ROOT_PATH / '.git/**')), os.path.normpath(str(config.site_output_path / '**')), '*.buildinfo', '*.postinfo.json']
+        ignore_patterns = [os.path.normpath(str(p)) for p in config.ignored_paths]
         super().__init__(ignore_patterns=ignore_patterns)
         self.config = config
         self.generator = generator
 
     def on_modified(self, event):
         # Manual checking for windows since watchdog doesn't work properly there
-        if self.config.site_output_path in Path(event.src_path).parents:
+        if any(p in Path(event.src_path).parents for p in self.config.ignored_paths):
             return
-        if self.config.ROOT_PATH / '.git' in Path(event.src_path).parents:
+        if any(f == Path(event.src_path).name for f in self.config.ignored_files):
             return
         # We dont care about dir changes, cause they can cause
         # infinite loops
