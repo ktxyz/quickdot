@@ -82,6 +82,16 @@ class Generator:
         
         def get_element_name(element):
             return self.trans.get_text(element.name, self.context['_LANG'])
+        
+        def get_ttext(text):
+            if isinstance(text, str):
+                return self.trans.get_text(text, self.context['_LANG'])
+            elif isinstance(text, dict):
+                return self.trans.get_text(text['text'], self.text['lang'])
+            else:
+                return 'ERROR'
+
+        jinja_env.filters['get_ttext'] = get_ttext
 
         jinja_env.filters['get_url'] = get_url_filter
         jinja_env.filters['get_element'] = get_element_filter
