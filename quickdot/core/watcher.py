@@ -1,3 +1,4 @@
+import os
 import time
 import logging
 import threading
@@ -21,14 +22,19 @@ def create_custom_handle(config):
 
 class QuickdotHandler(PatternMatchingEventHandler):
     def __init__(self, config, generator):
-        # Ignore everything that is in the .git directory or in the output directory
-        ignore_patterns = [str(config.ROOT_PATH / '.git/**'), str(config.site_output_path / '**'), '*.buildinfo', '*.postinfo.json']
-        ignore_patterns = [p.replace('\\\\', '/') for p in ignore_patterns]
+        # Normalize paths and ignore everything that is in the .git directory or in the output directory
+        ignore_patterns = [os.path.normpath(str(config.ROOT_PATH / '.git/**')), os.path.normpath(str(config.site_output_path / '**')), '*.buildinfo', '*.postinfo.json']
         super().__init__(ignore_patterns=ignore_patterns)
         self.config = config
         self.generator = generator
 
     def on_modified(self, event):
+        # Manual checking for windows since watchdog doesn't work properly there
+        if self.config.site_output_path in Path(event.src_path).parents:
+            return
+        if self.config.ROOT_PATH / '.git' in Path(event.src_path).parents:
+            return
+
         logging.info('File changed: %s', event.src_path)
         logging.info('Rebuilding site...')
         self.generator.regenerate()

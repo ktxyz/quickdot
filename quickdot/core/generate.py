@@ -6,11 +6,12 @@ import traceback
 from enum import Enum
 from pathlib import Path
 from datetime import date as datetime_date
+from datetime import datetime as datetime_time
 from concurrent.futures import ThreadPoolExecutor
 
 from jinja2 import Environment, FileSystemLoader
 from babel import Locale
-from babel.dates import format_date
+from babel.dates import format_date, format_time
 
 
 class ElementType(Enum):
@@ -136,6 +137,7 @@ class Generator:
                     self.context[key] = value
                 context = self.context.copy()
                 context['_LANG'] = lang
+                context['_TIME'] = format_time(datetime_time.now(), format='H:m:s', locale=Locale.parse(lang))
                 context['_DATE'] = format_date(datetime_date.today(), format='long', locale=Locale.parse(lang))
                 for element in elements:
                     executor.submit(self._run_with_exception_logging, generate_element_func, context, element, lang)
