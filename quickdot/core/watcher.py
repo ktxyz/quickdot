@@ -34,10 +34,15 @@ class QuickdotHandler(PatternMatchingEventHandler):
             return
         if self.config.ROOT_PATH / '.git' in Path(event.src_path).parents:
             return
+        # We dont care about dir changes, cause they can cause
+        # infinite loops
+        if Path(event.src_path).is_dir():
+            return
 
         logging.info('File changed: %s', event.src_path)
         logging.info('Rebuilding site...')
         self.generator.regenerate()
+        logging.info(f'Rebuilding done ready @ http://localhost:{self.config.live_server_port}')
 
 
 class Watcher:
