@@ -1,6 +1,7 @@
 import argparse
 
 from quickdot.core.config import Config
+from quickdot.core.watcher import Watcher
 from quickdot.core.generate import Generator
 from quickdot.core.trans import TranslationManager
 
@@ -31,9 +32,12 @@ def main():
 
     if config.gather_texts:
         trans.gather_texts()
-    else:
-        gen = Generator(config, trans)
 
+    if config.run_watcher:
+        watcher = Watcher(config, trans)
+        watcher.watch()
+    else:
+        Generator(config, trans).regenerate()
 
 if __name__ == "__main__":
     main()

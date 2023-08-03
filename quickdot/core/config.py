@@ -19,9 +19,6 @@ class Config:
         if self.use_threads is False:
             self.thread_count = 1
         
-        # TODO: NotImplemented
-        self.run_watcher = False
-    
     def _load_config(self):
         """"Loads the generator config file."""
         try:
@@ -33,6 +30,8 @@ class Config:
                 self.thread_count = config_data["thread_count"]
 
                 self.gather_texts = False
+
+                self.live_server_port = config_data["live_server_port"]
         except FileNotFoundError:
             print("No config file found.")
         except json.JSONDecodeError or KeyError:

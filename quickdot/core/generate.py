@@ -58,8 +58,8 @@ class Generator:
         self.site_map = SiteMap()
         self.context = {'_SITE_MAP': self.site_map, '_CONFIG': self.config}
 
+    def regenerate(self):
         self._copy_static_files()
-
         self._gather_data()
         self._generate_site()
 
@@ -100,7 +100,6 @@ class Generator:
         for name in elements:
             if type == ElementType.POST:
                 site_map_element = self._create_post_element(name)
-                print('added post element')
             else:
                 site_map_element = PageElement(name)
             self.site_map.add_element(site_map_element)
