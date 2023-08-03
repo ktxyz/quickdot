@@ -137,7 +137,7 @@ class Generator:
                     self.context[key] = value
                 context = self.context.copy()
                 context['_LANG'] = lang
-                context['_TIME'] = format_time(datetime_time.now(), format='H:m:s', locale=Locale.parse(lang))
+                context['_TIME'] = format_time(datetime_time.now(), format='HH:mm:SS', locale=Locale.parse(lang))
                 context['_DATE'] = format_date(datetime_date.today(), format='long', locale=Locale.parse(lang))
                 for element in elements:
                     executor.submit(self._run_with_exception_logging, generate_element_func, context, element, lang)

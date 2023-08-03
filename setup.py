@@ -8,7 +8,7 @@ with open('requirements.txt') as f:
 
 setup(
     name="quickdot",
-    version="0.2.0",
+    version="0.2.1",
     author="Kamil Tokarski",
     author_email="kamil@tokarski.xyz",
     description="A small ssg or rather a set of scripts for personal website",
